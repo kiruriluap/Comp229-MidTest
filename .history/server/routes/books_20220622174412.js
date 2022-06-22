@@ -101,7 +101,7 @@ router.get('/delete/:id', (req, res, next) => {
     books[0].remove().then(()=>{
       return res.send('1')
     })
-  })
+  })/
 });
 
 

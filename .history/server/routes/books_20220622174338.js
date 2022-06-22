@@ -60,48 +60,42 @@ router.post('/add', (req, res, next) => {
 // GET the Book Details page in order to edit an existing Book
 router.get('/:id', (req, res, next) => {
 
-    /*****************
-     * ADD CODE HERE *
-     *****************/
+    router.get('/:title', (req, res, next) => {
+    let title = req.params.title
+    Book.find({title:title}, (err, books) => {
+      if(err){
+        return res.send('-1')//server error
+      }
+      if(books.length===0){
+        //book not exist in db
+        return res.send('no such book in your book list')
+      }else{
+        res.render('./books/details', {
+          title: books[0].title,
+          price: books[0].price,
+          author: books[0].author,
+          genre: books[0].genre,
+          description: books[0].description
+        })
+      }
+    })
 });
 
 // POST - process the information passed from the details form and update the document
 router.post('/:id', (req, res, next) => {
-  let title = req.params.title
-  Book.find({title:title}, (err, books) => {
-    if(err){
-      return res.send('-1')//server error
-    }
-    if(books.length===0){
-      //book not exist in db
-      return res.send('no such book in your book list')
-    }else{
-      res.render('./books/details', {
-        title: books[0].title,
-        price: books[0].price,
-        author: books[0].author,
-        genre: books[0].genre,
-        description: books[0].description
-      })
-    }
-  })
+
+    /*****************
+     * ADD CODE HERE *
+     *****************/
 
 });
 
 // GET - process the delete by user id
 router.get('/delete/:id', (req, res, next) => {
-  let title = req.params.title
-  Book.find({title:title}, (err, books) =>{
-    if(err){
-      return res.send('-1')
-    }
-    if(books.length===0){
-      return res.send('0')
-    }
-    books[0].remove().then(()=>{
-      return res.send('1')
-    })
-  })
+
+    /*****************
+     * ADD CODE HERE *
+     *****************/
 });
 
 
