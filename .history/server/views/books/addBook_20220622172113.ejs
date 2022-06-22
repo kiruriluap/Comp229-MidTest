@@ -1,0 +1,123 @@
+% include ../partials/header.ejs %>
+<!-- MAIN CONTENT -->
+<div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+        <div class="alert alert-success" id="successTip" role="alert" hidden>
+            success
+        </div>
+        <div class="alert alert-danger" id="failTip" role="alert" hidden>
+            fail
+        </div>
+        <h1>Add your favorite book:</h1>
+        <div class="form-group">
+            <label for="title">
+                Title
+            </label>
+            <input class="form-control" id="title" name="title" placeholder="title" type="text">
+            </input>
+        </div>
+        <div class="form-group">
+            <label for="price">
+                Price
+            </label>
+            <input class="form-control" id="price" name="price" placeholder="price" type="number">
+            </input>
+        </div>
+        <div class="form-group">
+            <label for="author">
+                Author
+            </label>
+            <input class="form-control" id="author" name="author" placeholder="author" type="text">
+            </input>
+        </div>
+        <div class="form-group">
+            <label for="genre">
+                Genre
+            </label>
+            <input class="form-control" id="genre" name="genre" placeholder="genre" type="text">
+            </input>
+        </div>
+
+        <div class="form-group">
+            <label for="description">
+                Description
+            </label>
+            <input class="form-control" id="description" name="description" placeholder="description" type="textarea">
+            </input>
+        </div>
+        <button disabled="disabled" class="btn btn-primary" id="btn" type="submit">
+            <i class="fa fa-check-square-o"></i> Add
+        </button>
+        <a href="/books" class="btn btn-warning"><i class="fa fa-undo"></i> Cancel</a>
+    </div>
+    <div class="col-md-4">
+    </div>
+</div>
+<section>
+    <script src="/Scripts/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        $('#btn').click(() =>{
+      let title = $('#title').val()
+      let price = $('#price').val()
+      let author = $('#author').val()
+      let genre = $('#genre').val()
+      let description = $('#description').val()
+
+      //POST: add book to db using AJAX
+      $.post('/books/add', {
+        title:title,
+        price:price,
+        author:author,
+        genre:genre,
+        description:description
+      }, (data) => {
+        if(data==='1'){
+          alert('add successfully')
+          window.location='/books'
+        }else if(data==='0'){
+          //book exists
+          $('#failTip').attr('hidden', null).html('book already exists')
+        }else if(data === '-1'){
+          //server error
+          $('#failTip').attr('hidden', null).html('server error, please refresh')
+        }
+      })
+    })
+
+
+    //CHECKOUT: cursor blur to check whether the book exists in db using AJAX
+    $('#title').blur(() => {
+      let title = $('#title').val()
+      if(title.trim()===''){
+        $('#failTip').attr('hidden', null).html('title cannot be empty')
+        return
+      }
+      $.ajax({
+        type: 'checkout',
+        url: '/books/'+title,
+        success: (data) => {
+          if(data==='1'){
+            //book not exist
+            $('#successTip').attr('hidden', null).html('book not exists')
+            $('#btn').attr('disabled', null)
+          }else if(data === '0'){
+            $('#failTip').attr('hidden', null).html('book already exists')
+            $('#btn').attr('disabled', 'disabled')
+          }else if(data === '-1'){
+            $('#failTip').attr('hidden', null).html('server error')
+            $('#btn').attr('disabled', 'disabled')
+          }
+        }
+      })
+    })
+
+    //CHECKOUT: cursor focus event
+    $('#title').focus(() => {
+      $('#successTip').attr('hidden', '')
+      $('#failTip').attr('hidden', '')
+    })
+    </script>
+</section>
+<% include ../partials/footer.ejs %>

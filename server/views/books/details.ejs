@@ -1,0 +1,72 @@
+<% include ../partials/header.ejs %>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+      <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+          <h1><%= title %></h1>
+              <div class="form-group">
+                <label for="title">Title</label>
+                <input disabled="disabled" type="text" class="form-control" id="title"
+                placeholder="Book Name" name="title" value="<%= title %>" required>
+              </div>
+              <div class="form-group">
+                <label for="price">Price</label>
+                <input type="number" class="form-control" id="price"
+                placeholder="Book Price" name="price" value="<%= price %>"  required>
+              </div>
+              <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text" class="form-control" id="author"
+                placeholder="Book Author" name="author" value="<%= author %>"  required>
+              </div>
+              <div class="form-group">
+                <label for="genre">Genre</label>
+                <input type="text" class="form-control" id="genre"
+                placeholder="Book Genre" name="genre" value="<%= genre %>"  required>
+              </div>
+              <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description"
+                placeholder="Book Genre" name="description" value="<%= description %>">
+              </div>
+
+              <button type="submit" class="btn btn-primary" id="btn"><i class="fa fa-check-square-o"></i> Submit</button>
+              <a href="/books" class="btn btn-warning"><i class="fa fa-undo"></i> Cancel</a>
+        </div>
+      </div>
+    </div>
+<section>
+    <script src="/Scripts/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+      //POST: update button click to send AJAX
+      $('#btn').click(()=>{
+        let title = $('#title').val()
+        let price = $('#price').val()
+        let author = $('#author').val()
+        let genre = $('#genre').val()
+        let description = $('#description').val()
+
+        $.post('/books/<%= title %>', {
+            title:title,
+            price:price,
+            author:author,
+            genre:genre,
+            description:description
+        }, (data) => {
+          if(data==='1'){
+            //modify successfully
+            alert('modify successfully')
+            window.location='/books'
+          }else if(data==='0'){
+            //modify failed
+            alert('modify failed')
+          }else if(data==='-1'){
+            //server error
+            alert('server error')
+          }
+        })
+      })
+    </script>
+</section>
+<% include ../partials/footer.ejs %>
