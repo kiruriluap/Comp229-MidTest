@@ -15,7 +15,7 @@ router.get('/', (req, res, next) => {
     }
     else {
       res.render('books/index', {
-        title: 'booklist',
+        title: 'Books',
         books: books
       });
     }
@@ -81,27 +81,24 @@ router.get('/:id', (req, res, next) => {
 
 // POST - process the information passed from the details form and update the document
 router.post('/:id', (req, res, next) => {
-  let myBook = req.body
-    Book.find({title:myBook.title}, (err, books) =>{
-      if(err){
-        return res.send('-1')//server error
-      }
-
-      if(books.length===0){
-        //no such book in db
-        return res.send('0')
-      }
-
-      books[0].price = myBook.price
-      books[0].author = myBook.author
-      books[0].genre = myBook.genre
-      books[0].description = myBook.description
-
-      books[0].save().then(()=>{
-        return res.send('1')
+  let title = req.params.title
+  Book.find({title:title}, (err, books) => {
+    if(err){
+      return res.send('-1')//server error
+    }
+    if(books.length===0){
+      //book not exist in db
+      return res.send('no such book in your book list')
+    }else{
+      res.render('./books/details', {
+        title: books[0].title,
+        price: books[0].price,
+        author: books[0].author,
+        genre: books[0].genre,
+        description: books[0].description
       })
-      
-    })
+    }
+  })
 
 });
 

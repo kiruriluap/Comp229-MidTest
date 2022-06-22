@@ -37,7 +37,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../../client')));
-//app.use(express.static(path.join(__dirname, '../../node_modules')));
+app.use(express.static(path.join(__dirname, '../../node_modules')));
 
 // route redirects
 app.use('/', index);
@@ -59,6 +59,8 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
+app.listen(3000, () => {
+	console.log('server running...')
+})
 
 module.exports = app;

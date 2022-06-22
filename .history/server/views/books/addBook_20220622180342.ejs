@@ -56,68 +56,7 @@
     </div>
 </div>
 <section>
-    <script src="/Scripts/lib/jquery/dist/jquery.min.js"></script>
-    <script>
-        $('#btn').click(() =>{
-      let title = $('#title').val()
-      let price = $('#price').val()
-      let author = $('#author').val()
-      let genre = $('#genre').val()
-      let description = $('#description').val()
-
-      //POST: add book to db using AJAX
-      $.post('/books/add', {
-        title:title,
-        price:price,
-        author:author,
-        genre:genre,
-        description:description
-      }, (data) => {
-        if(data==='1'){
-          alert('add successfully')
-          window.location='/books'
-        }else if(data==='0'){
-          //book exists
-          $('#failTip').attr('hidden', null).html('book already exists')
-        }else if(data === '-1'){
-          //server error
-          $('#failTip').attr('hidden', null).html('server error, please refresh')
-        }
-      })
-    })
-
-
-    //CHECKOUT: cursor blur to check whether the book exists in db using AJAX
-    $('#title').blur(() => {
-      let title = $('#title').val()
-      if(title.trim()===''){
-        $('#failTip').attr('hidden', null).html('title cannot be empty')
-        return
-      }
-      $.ajax({
-        type: 'checkout',
-        url: '/books/'+title,
-        success: (data) => {
-          if(data==='1'){
-            //book not exist
-            $('#successTip').attr('hidden', null).html('book not exists')
-            $('#btn').attr('disabled', null)
-          }else if(data === '0'){
-            $('#failTip').attr('hidden', null).html('book already exists')
-            $('#btn').attr('disabled', 'disabled')
-          }else if(data === '-1'){
-            $('#failTip').attr('hidden', null).html('server error')
-            $('#btn').attr('disabled', 'disabled')
-          }
-        }
-      })
-    })
-
-    //CHECKOUT: cursor focus event
-    $('#title').focus(() => {
-      $('#successTip').attr('hidden', '')
-      $('#failTip').attr('hidden', '')
-    })
+    
     </script>
 </section>
 <% include ../partials/footer.ejs %>
